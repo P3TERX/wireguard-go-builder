@@ -1,0 +1,36 @@
+name: Build and Release
+
+env:
+  WGGO_VERSION: '0.0.20201118'
+  WGGO_SRC_SHA: '8b9f3dd5f7083118fae9259868f994562270167a7ee9db28c53f415f0b20a388'
+
+on:
+  repository_dispatch:
+  workflow_dispatch:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.15.8
+
+      - name: Build
+        run: ./build.sh
+
+      - name: Upload to Release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: build/*
+          tag: ${{ env.WGGO_VERSION }}
+          overwrite: true
+          file_glob: true
