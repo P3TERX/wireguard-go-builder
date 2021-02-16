@@ -1,13 +1,8 @@
 name: Build and Release
 
-env:
-  WGGO_VERSION: '0.0.20201118'
-  WGGO_SRC_SHA: '8b9f3dd5f7083118fae9259868f994562270167a7ee9db28c53f415f0b20a388'
-
 on:
   repository_dispatch:
   workflow_dispatch:
-  push:
 
 jobs:
   build:
@@ -15,13 +10,18 @@ jobs:
 
     steps:
 
+      - name: Get Version Number
+        run: |
+          WGGO_VERSION=$(curl -fsSL https://api.github.com/repos/WireGuard/wireguard-go/tags | grep 'name' | head -1 | cut -d'"' -f4)
+          echo "WGGO_VERSION=${WGGO_VERSION}" >> $GITHUB_ENV
+
       - name: Checkout
         uses: actions/checkout@v2
 
       - name: Setup go
         uses: actions/setup-go@v2
         with:
-          go-version: 1.15.8
+          go-version: 1.15
 
       - name: Build
         run: ./build.sh
