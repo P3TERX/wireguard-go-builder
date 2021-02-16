@@ -5,7 +5,6 @@ set -e
 set -u
 
 version="${WGGO_VERSION}"
-src_file_sha256="${WGGO_SRC_SHA}"
 
 src_file="wireguard-go-${version}.tar.xz"
 src_url="https://git.zx2c4.com/wireguard-go/snapshot/${src_file}"
@@ -23,7 +22,6 @@ mkdir "$vendor_dir" "$src_dir" "$build_dir"
 
 # Get and verify extract source file.
 wget -O "$src_file_path" "$src_url"
-echo "$src_file_sha256  $src_file_path" | shasum -c
 tar --strip-components=1 -C "$src_dir" -xJf "$src_file_path"
 
 # Patch Makefile to remove building on Linux check.
