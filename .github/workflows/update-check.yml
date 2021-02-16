@@ -1,0 +1,34 @@
+name: Update Check
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: 45 12 * * *
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Get Version Number
+      id: getVersion
+      run: echo "::set-output name=releaseTag::$(curl -fsSL https://api.github.com/repos/WireGuard/wireguard-go/tags | grep 'name' | head -1 | cut -d'"' -f4)"
+
+    - name: Compare Version Number
+      id: cacheVersion
+      uses: actions/cache@v2
+      with:
+        path: .releaseTag
+        key: wireguard-go-${{ steps.getVersion.outputs.releaseTag }}
+
+    - name: Save New Version Number
+      if: steps.cacheVersion.outputs.cache-hit != 'true'
+      run: echo ${{ steps.getVersion.outputs.releaseTag }} | tee .releaseTag
+
+    - name: Bump Version
+      if: steps.cacheVersion.outputs.cache-hit != 'true'
+      uses: peter-evans/repository-dispatch@v1
+      with:
+        token: ${{ secrets.ACTIONS_PAT }}
+        event-type: Bump Version to ${{ steps.getVersion.outputs.releaseTag }}
