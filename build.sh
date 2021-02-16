@@ -52,7 +52,7 @@ for target in "${targets[@]}"; do
 	target_=($target)
 	target_os="${target_[0]}"
 	target_arch="${target_[1]}"
-	build_archive_file="wireguard-go-$target_os-$target_arch.tar.xz"
+	build_archive_file="wireguard-go-$target_os-$target_arch.tar.gz"
 	build_archive_path="$build_dir/$build_archive_file"
 	build_archive_file_sha256="$build_archive_file.sha256"
 
@@ -65,7 +65,7 @@ for target in "${targets[@]}"; do
 
 	pushd "$src_dir" > /dev/null
 	make
-	tar cfJ "$build_archive_path" wireguard-go*
+	tar cfz "$build_archive_path" wireguard-go*
 
 	pushd "$build_dir" > /dev/null
 	shasum -a 256 "$build_archive_file" > "$build_archive_file_sha256"
