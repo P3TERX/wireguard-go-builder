@@ -3,6 +3,10 @@ name: Build and Release
 on:
   repository_dispatch:
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'wireguard-go version'
+        required: false
 
 jobs:
   build:
@@ -12,7 +16,11 @@ jobs:
 
       - name: Get Version Number
         run: |
-          WGGO_VERSION=$(curl -fsSL https://api.github.com/repos/WireGuard/wireguard-go/tags | grep 'name' | head -1 | cut -d'"' -f4)
+          if [[ -n "${{ github.event.inputs.version }}" ]]; then
+            WGGO_VERSION=${{ github.event.inputs.version }}
+          else
+            WGGO_VERSION=$(curl -fsSL https://api.github.com/repos/WireGuard/wireguard-go/tags | grep 'name' | head -1 | cut -d'"' -f4)
+          fi
           echo "WGGO_VERSION=${WGGO_VERSION}" >> $GITHUB_ENV
 
       - name: Checkout
@@ -26,7 +34,14 @@ jobs:
       - name: Build
         run: ./build.sh
 
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: wireguard-go-${{ env.WGGO_VERSION }}
+          path: build
+
       - name: Upload to Release
+        if: github.event.inputs.version == ''
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
