@@ -29,22 +29,22 @@ sed -i.bak 's/$(wildcard .git),linux/$(wildcard .git),linux_check_disabled/g' "$
 
 # Build all the targets.
 targets=(
-#	'darwin amd64'
+	'darwin amd64'
 
 	'linux 386'
 	'linux amd64'
-#	'linux arm'
-#	'linux arm64'
-#	'linux ppc64'
-#	'linux ppc64le'
-#	'linux mips'
-#	'linux mipsle'
+	'linux arm'
+	'linux arm64'
+	'linux ppc64'
+	'linux ppc64le'
+	'linux mips'
+	'linux mipsle'
 
-#	'freebsd 386'
-#	'freebsd amd64'
-#	'freebsd arm'
+	'freebsd 386'
+	'freebsd amd64'
+	'freebsd arm'
 
-#	'openbsd amd64'
+	'openbsd amd64'
 )
 for target in "${targets[@]}"; do
 	target_=($target)
