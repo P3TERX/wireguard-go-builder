@@ -60,6 +60,7 @@ for target in "${targets[@]}"; do
 
 	export GOOS="$target_os"
 	export GOARCH="$target_arch"
+	export CGO_ENABLED=0
 
 	pushd "$src_dir" > /dev/null
 	make
