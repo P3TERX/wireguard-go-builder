@@ -13,7 +13,7 @@ jobs:
 
     - name: Get Version Number
       id: getVersion
-      run: echo "::set-output name=releaseTag::$(curl -fsSL https://api.github.com/repos/WireGuard/wireguard-go/tags | grep 'name' | head -1 | cut -d'"' -f4)"
+      run: echo "::set-output name=releaseTag::$(curl -fsSL https://api.github.com/repos/WireGuard/wireguard-go/tags | grep 'name' | grep -v v | head -1 | cut -d'"' -f4)"
 
     - name: Compare Version Number
       id: cacheVersion

@@ -19,7 +19,7 @@ jobs:
           if [[ -n "${{ github.event.inputs.version }}" ]]; then
             WGGO_VERSION=${{ github.event.inputs.version }}
           else
-            WGGO_VERSION=$(curl -fsSL https://api.github.com/repos/WireGuard/wireguard-go/tags | grep 'name' | head -1 | cut -d'"' -f4)
+            WGGO_VERSION=$(curl -fsSL https://api.github.com/repos/WireGuard/wireguard-go/tags | grep 'name' | grep -v v | head -1 | cut -d'"' -f4)
           fi
           echo "WGGO_VERSION=${WGGO_VERSION}" >> $GITHUB_ENV
 
