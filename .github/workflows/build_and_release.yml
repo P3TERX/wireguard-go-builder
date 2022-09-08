@@ -66,5 +66,5 @@ jobs:
           tag: ${{ env.WGGO_VERSION }}
           overwrite: true
           file_glob: true
-          prerelease: true
+          prerelease: false
           body: "Change logs: https://git.zx2c4.com/wireguard-go/log"
