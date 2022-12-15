@@ -13,11 +13,11 @@ jobs:
 
     - name: Get Version Number
       id: getVersion
-      run: echo "::set-output name=releaseTag::$(curl -fsSL https://api.github.com/repos/WireGuard/wireguard-go/tags | grep 'name' | grep -v v | head -1 | cut -d'"' -f4)"
+      run: echo "releaseTag=$(curl -fsSL https://api.github.com/repos/WireGuard/wireguard-go/tags | grep 'name' | grep -v v | head -1 | cut -d'"' -f4)" >> $GITHUB_OUTPUT
 
     - name: Compare Version Number
       id: cacheVersion
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: .releaseTag
         key: wireguard-go-${{ steps.getVersion.outputs.releaseTag }}
