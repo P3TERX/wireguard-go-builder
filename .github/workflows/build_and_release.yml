@@ -14,7 +14,10 @@ on:
         description: 'Upload to Release'
         type: boolean
         required: true
-        default: 'false'
+        default: false
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -61,7 +64,7 @@ jobs:
         if: contains(github.event.action, 'Bump') || github.event.inputs.release == 'true'
         uses: svenstaro/upload-release-action@v2
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          repo_token: ${{ github.token }}
           file: build/*
           tag: ${{ env.WGGO_VERSION }}
           overwrite: true

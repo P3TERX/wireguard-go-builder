@@ -5,6 +5,10 @@ on:
   schedule:
     - cron: 45 12 * * *
 
+permissions:
+  actions: write
+  contents: write
+
 jobs:
   check:
     runs-on: ubuntu-latest
@@ -28,9 +32,9 @@ jobs:
 
     - name: Bump Version
       if: steps.cacheVersion.outputs.cache-hit != 'true'
-      uses: peter-evans/repository-dispatch@v1
+      uses: peter-evans/repository-dispatch@v2
       with:
-        token: ${{ secrets.ACTIONS_PAT }}
+        token: ${{ github.token }}
         event-type: Bump Version to ${{ steps.getVersion.outputs.releaseTag }}
 
     - name: Delete workflow runs
